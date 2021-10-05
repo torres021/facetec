@@ -1,5 +1,7 @@
 {
   "name": "facetecsdk",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
