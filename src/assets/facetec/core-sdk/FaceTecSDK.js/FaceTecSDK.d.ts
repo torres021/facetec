@@ -1,7 +1,7 @@
 import { FaceTecCustomization, FaceTecOvalCustomization, FaceTecCancelButtonCustomization, FaceTecFeedbackBarCustomization, FaceTecFrameCustomization, FaceTecExitAnimationCustomization, FaceTecSessionTimerCustomization, FaceTecExitAnimationStyle, FaceTecCancelButtonLocation, FaceTecOverlayCustomization, FaceTecGuidanceCustomization, FaceTecResultScreenCustomization, FaceTecEnterFullScreenCustomization, FaceTecSecurityWatermarkImage, FaceTecSecurityWatermarkCustomization } from "./FaceTecCustomization";
-import { FaceTecLoggingMode } from './FaceTecLogging';
-import { FaceTecSession, FaceTecSessionFromIFrame } from './FaceTecSession';
-import { FaceTecAuditTrailType, FaceTecSDKStatus, FaceTecSessionStatus, FaceTecIDScanStatus, FaceTecFaceScanProcessor, FaceTecIDScanProcessor, FaceTecIDScanNextStep, FaceTecFaceScanResultCallback, FaceTecIDScanResultCallback, FaceTecRetryScreen, InitializeCallback, FaceTecAuditTrailImagesToReturn } from './FaceTecPublicApi';
+import { FaceTecLoggingMode } from "./FaceTecLogging";
+import { FaceTecSession, FaceTecSessionFromIFrame } from "./FaceTecSession";
+import { FaceTecAuditTrailType, FaceTecSDKStatus, FaceTecSessionStatus, FaceTecIDScanStatus, FaceTecFaceScanProcessor, FaceTecIDScanProcessor, FaceTecIDScanNextStep, FaceTecFaceScanResultCallback, FaceTecIDScanResultCallback, FaceTecRetryScreen, InitializeCallback, FaceTecAuditTrailImagesToReturn } from "./FaceTecPublicApi";
 export declare var FaceTecSDK: {
     /**
     * Initialize FaceTecSDK in development mode using a Device Identifier Key - HTTPS Log mode.

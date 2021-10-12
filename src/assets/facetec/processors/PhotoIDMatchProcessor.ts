@@ -2,14 +2,21 @@
 // Welcome to the annotated FaceTec Device SDK core code for performing secure Photo ID Scan.
 //
 
-import { Config } from '../Config';
-import {FaceTecFaceScanResultCallback, FaceTecIDScanProcessor, FaceTecIDScanResult, FaceTecIDScanResultCallback, FaceTecSessionResult} from '../core-sdk/FaceTecSDK.js/FaceTecPublicApi';
-import {FaceTecSDK} from '../core-sdk/FaceTecSDK.js/FaceTecSDK';
 
 //
 // This is an example self-contained class to perform Photo ID Scans with the FaceTec SDK.
 // You may choose to further componentize parts of this in your own Apps based on your specific requirements.
 //
+import {
+  FaceTecFaceScanResultCallback,
+  FaceTecIDScanProcessor,
+  FaceTecIDScanResult, FaceTecIDScanResultCallback,
+  FaceTecSessionResult
+} from "../core-sdk/FaceTecSDK.js/FaceTecPublicApi";
+import {SampleAppControllerReference} from "../sampleAppControllerReference/SampleAppControllerReference";
+import {FaceTecSDK} from "../core-sdk/FaceTecSDK.js/FaceTecSDK";
+import {Config} from "../Config";
+
 export class PhotoIDMatchProcessor implements FaceTecIDScanProcessor {
   latestNetworkRequest: XMLHttpRequest = new XMLHttpRequest();
   public latestSessionResult: FaceTecSessionResult | null;
@@ -20,7 +27,7 @@ export class PhotoIDMatchProcessor implements FaceTecIDScanProcessor {
   // In the code in your own App, you can pass around signals, flags, intermediates, and results however you would like.
   //
   success: boolean;
-  sampleAppControllerReference: any;
+  sampleAppControllerReference: SampleAppControllerReference;
 
   constructor(sessionToken: string, sampleAppControllerReference: any) {
 
@@ -36,18 +43,18 @@ export class PhotoIDMatchProcessor implements FaceTecIDScanProcessor {
     // In v9.2.2+, configure the messages that will be displayed to the User in each of the possible cases.
     // Based on the internal processing and decision logic about how the flow gets advanced, the FaceTec SDK will use the appropriate, configured message.
     FaceTecSDK.FaceTecCustomization.setIDScanUploadMessageOverrides(
-        'Procesando', // Upload of ID front-side has started.
-      'Estamos cargando tus datos<br/>espera un momento', // Upload of ID front-side is still uploading to Server after an extended period of time.
-      'Carga completa', // Upload of ID front-side to the Server is complete.
-        'Procesando', // Upload of ID front-side is complete and we are waiting for the Server to finish processing and respond.
-      'Procesando', // Upload of ID back-side has started.
-        'Estamos cargando tus datos<br/>espera un momento', // Upload of ID back-side is still uploading to Server after an extended period of time.
-        'Carga completa', // Upload of ID back-side to Server is complete.
-        'Procesando', // Upload of ID back-side is complete and we are waiting for the Server to finish processing and respond.
-      'Procesando', // Upload of User Confirmed Info has started.
-        'Estamos cargando tus datos<br/>espera un momento', // Upload of User Confirmed Info is still uploading to Server after an extended period of time.
-        'Carga completa', // Upload of User Confirmed Info to the Server is complete.
-        'Procesando' // Upload of User Confirmed Info is complete and we are waiting for the Server to finish processing and respond.
+      "Uploading<br/>Encrypted<br/>ID Scan", // Upload of ID front-side has started.
+      "Still Uploading...<br/>Slow Connection", // Upload of ID front-side is still uploading to Server after an extended period of time.
+      "Upload Complete", // Upload of ID front-side to the Server is complete.
+      "Processing ID Scan", // Upload of ID front-side is complete and we are waiting for the Server to finish processing and respond.
+      "Uploading<br/>Encrypted<br/>Back of ID", // Upload of ID back-side has started.
+      "Still Uploading...<br/>Slow Connection", // Upload of ID back-side is still uploading to Server after an extended period of time.
+      "Upload Complete", // Upload of ID back-side to Server is complete.
+      "Processing Back of ID", // Upload of ID back-side is complete and we are waiting for the Server to finish processing and respond.
+      "Uploading<br/>Your Confirmed Info", // Upload of User Confirmed Info has started.
+      "Still Uploading...<br/>Slow Connection", // Upload of User Confirmed Info is still uploading to Server after an extended period of time.
+      "Upload Complete", // Upload of User Confirmed Info to the Server is complete.
+      "Processing" // Upload of User Confirmed Info is complete and we are waiting for the Server to finish processing and respond.
     );
 
     //
@@ -122,7 +129,7 @@ export class PhotoIDMatchProcessor implements FaceTecIDScanProcessor {
           if(responseJSON.wasProcessed === true) {
 
             // Demonstrates dynamically setting the Success Screen Message.
-            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("¡Muy bien!\n Te hemos reconocido");
+            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("Liveness\nConfirmed");
 
             // In v9.2.0+, simply pass in scanResultBlob to the proceedToNextStep function to advance the User flow.
             // scanResultBlob is a proprietary, encrypted blob that controls the logic for what happens next for the User.
@@ -172,8 +179,8 @@ export class PhotoIDMatchProcessor implements FaceTecIDScanProcessor {
       if(this.latestNetworkRequest.readyState === XMLHttpRequest.DONE) {
         return;
       }
-      faceScanResultCallback.uploadMessageOverride("Cargando...");
-    }, 1000);
+      faceScanResultCallback.uploadMessageOverride("Still Uploading...");
+    }, 6000);
   }
 
   //
@@ -255,13 +262,14 @@ export class PhotoIDMatchProcessor implements FaceTecIDScanProcessor {
             // Based on the internal processing and decision logic about how the flow gets advanced, the FaceTec SDK will use the appropriate, configured message.
             // Please note that this programmatic API overrides these same Strings that can also be set via our standard, non-programmatic Text Customization & Localization APIs.
             FaceTecSDK.FaceTecCustomization.setIDScanResultScreenMessageOverrides(
-              "'La carga de tu foto!<br/> se completó con éxito'", // Successful scan of ID front-side (ID Types with no back-side).
-              "La carga de tu foto<br/>se completó con éxito", // Successful scan of ID front-side (ID Types that do have a back-side).
-                "La carga de tu foto<br/>se completó con éxito", // Successful scan of the ID back-side.
-              "El proceso se realizo<br/>correctamente", // Successful upload of final IDScan containing User-Confirmed ID Text.
-              "la foto de tu cédula <br/> no se ve bien </br> Debes intentar otra vez", // Case where a Retry is needed because the Face on the Photo ID did not Match the User's Face highly enough.
-              "la foto de tu cédula <br/> no se ve bien </br> Debes intentar otra vez", // Case where a Retry is needed because a Full ID was not detected with high enough confidence.
-              "la foto de tu cédula <br/> no se ve bien </br> Debes intentar otra vez" // Case where a Retry is needed because the OCR did not produce good enough results and the User should Retry with a better capture.
+              "Your 3D Face<br/>Matched Your ID", // Successful scan of ID front-side (ID Types with no back-side).
+              "Your 3D Face<br/>Matched Your ID", // Successful scan of ID front-side (ID Types that do have a back-side).
+              "Back of ID Captured", // Successful scan of the ID back-side.
+              "ID Verification<br/>Complete", // Successful upload of final IDScan containing User-Confirmed ID Text.
+              "Face Didn't Match<br/>Highly Enough", // Case where a Retry is needed because the Face on the Photo ID did not Match the User's Face highly enough.
+              "ID Document<br/>Not Fully Visible", // Case where a Retry is needed because a Full ID was not detected with high enough confidence.
+              "ID Text Not Legible", // Case where a Retry is needed because the OCR did not produce good enough results and the User should Retry with a better capture.
+              "ID Type Not Supported<br/>Please Use a Different ID", // Case where there is likely no OCR Template installed for the document the User is attempting to scan.
             );
 
             // In v9.2.0+, simply pass in scanResultBlob to the proceedToNextStep function to advance the User flow.

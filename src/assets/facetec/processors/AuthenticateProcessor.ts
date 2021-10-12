@@ -2,14 +2,21 @@
 // Welcome to the annotated FaceTec Device SDK core code for performing secure Authentication against a previously enrolled user.
 //
 
-import { Config } from '../Config';
-import { FaceTecSDK } from '../core-sdk/FaceTecSDK.js/FaceTecSDK';
-import { FaceTecSessionResult, FaceTecFaceScanResultCallback, FaceTecFaceScanProcessor } from '../core-sdk/FaceTecSDK.js/FaceTecPublicApi';
+
 
 //
 // This is an example self-contained class to perform Authentication with the FaceTec SDK.
 // You may choose to further componentize parts of this in your own Apps based on your specific requirements.
 //
+import {
+  FaceTecFaceScanProcessor,
+  FaceTecFaceScanResultCallback,
+  FaceTecSessionResult
+} from "../core-sdk/FaceTecSDK.js/FaceTecPublicApi";
+import {SampleAppControllerReference} from "../sampleAppControllerReference/SampleAppControllerReference";
+import {FaceTecSDK} from "../core-sdk/FaceTecSDK.js/FaceTecSDK";
+import {Config} from "../Config";
+
 export class AuthenticateProcessor implements FaceTecFaceScanProcessor {
   latestNetworkRequest: XMLHttpRequest = new XMLHttpRequest();
   public latestSessionResult: FaceTecSessionResult | null;
@@ -19,7 +26,7 @@ export class AuthenticateProcessor implements FaceTecFaceScanProcessor {
   // In the code in your own App, you can pass around signals, flags, intermediates, and results however you would like.
   //
   success: boolean;
-  sampleAppControllerReference: any;
+  sampleAppControllerReference: SampleAppControllerReference;
 
   constructor(sessionToken: string, sampleAppControllerReference: any) {
 
@@ -103,7 +110,7 @@ export class AuthenticateProcessor implements FaceTecFaceScanProcessor {
           if(responseJSON.wasProcessed) {
 
             // Demonstrates dynamically setting the Success Screen Message.
-            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("¡Muy bien! Te hemos reconocido");
+            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("Authenticated");
 
             // In v9.2.0+, simply pass in scanResultBlob to the proceedToNextStep function to advance the User flow.
             // scanResultBlob is a proprietary, encrypted blob that controls the logic for what happens next for the User.

@@ -1,5 +1,6 @@
-import { SampleAppUIFunctions } from "./SampleAppUIFunctions";
-const ServerUpgradeLogo = ''; //require("../sample-app-resources/images/upgrade.png").default;
+import {SampleAppUIFunctions} from "./SampleAppUIFunctions";
+
+const ServerUpgradeLogo = '';
 
 // Helper class to handle setup and display of FaceTec Server Upgrade View
 export class AdditionalScreens {
@@ -18,8 +19,8 @@ export class AdditionalScreens {
     if(AdditionalScreens.elementToCopyStylesFrom === "") {
       console.error("elementToCopyStylesFrom must have an id");
     }
-    const computedStyles = getComputedStyle(elementToCopyStylesFrom);
-    const serverUpgradeElement = document.getElementById("additional-screen")!;
+    var computedStyles = getComputedStyle(elementToCopyStylesFrom);
+    var serverUpgradeElement = document.getElementById("additional-screen")!;
     serverUpgradeElement.style.width = computedStyles.width;
     serverUpgradeElement.style.height = computedStyles.height;
     serverUpgradeElement.style.border = computedStyles.border;

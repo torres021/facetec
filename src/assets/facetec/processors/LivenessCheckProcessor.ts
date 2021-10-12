@@ -2,13 +2,20 @@
 // Welcome to the annotated FaceTec Device SDK core code for performing secure Liveness Checks!
 //
 
+
+
 //
 // This is an example self-contained class to perform Liveness Checks with the FaceTec SDK.
 // You may choose to further componentize parts of this in your own Apps based on your specific requirements.
 //
-import {FaceTecFaceScanProcessor, FaceTecFaceScanResultCallback, FaceTecSessionResult} from '../core-sdk/FaceTecSDK.js/FaceTecPublicApi';
-import {FaceTecSDK} from '../core-sdk/FaceTecSDK.js/FaceTecSDK';
-import {Config} from '../Config';
+import {
+  FaceTecFaceScanProcessor,
+  FaceTecFaceScanResultCallback,
+  FaceTecSessionResult
+} from "../core-sdk/FaceTecSDK.js/FaceTecPublicApi";
+import {SampleAppControllerReference} from "../sampleAppControllerReference/SampleAppControllerReference";
+import {FaceTecSDK} from "../core-sdk/FaceTecSDK.js/FaceTecSDK";
+import {Config} from "../Config";
 
 export class LivenessCheckProcessor implements FaceTecFaceScanProcessor {
   latestNetworkRequest: XMLHttpRequest = new XMLHttpRequest();
@@ -19,7 +26,7 @@ export class LivenessCheckProcessor implements FaceTecFaceScanProcessor {
   // In the code in your own App, you can pass around signals, flags, intermediates, and results however you would like.
   //
   success: boolean;
-  sampleAppControllerReference: any;
+  sampleAppControllerReference: SampleAppControllerReference;
 
   constructor(sessionToken: string, sampleAppControllerReference: any) {
 
@@ -68,7 +75,7 @@ export class LivenessCheckProcessor implements FaceTecFaceScanProcessor {
     //
     // Part 4:  Get essential data off the FaceTecSessionResult
     //
-    let parameters = {
+    var parameters = {
       faceScan: sessionResult.faceScan,
       auditTrailImage: sessionResult.auditTrail[0],
       lowQualityAuditTrailImage: sessionResult.lowQualityAuditTrail[0],
@@ -103,7 +110,7 @@ export class LivenessCheckProcessor implements FaceTecFaceScanProcessor {
           if(responseJSON.wasProcessed) {
 
             // Demonstrates dynamically setting the Success Screen Message.
-            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("¡Muy bien!\nTe hemos reconocido");
+            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("Liveness\nConfirmed");
 
             // In v9.2.0+, simply pass in scanResultBlob to the proceedToNextStep function to advance the User flow.
             // scanResultBlob is a proprietary, encrypted blob that controls the logic for what happens next for the User.
@@ -153,8 +160,8 @@ export class LivenessCheckProcessor implements FaceTecFaceScanProcessor {
       if(this.latestNetworkRequest.readyState === XMLHttpRequest.DONE) {
         return;
       }
-      faceScanResultCallback.uploadMessageOverride("Cargando...");
-    }, 1000);
+      faceScanResultCallback.uploadMessageOverride("Still Uploading...");
+    }, 6000);
   }
 
   //

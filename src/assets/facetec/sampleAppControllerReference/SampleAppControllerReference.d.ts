@@ -1,9 +1,10 @@
-import {FaceTecIDScanResult, FaceTecSessionResult} from '../core-sdk/FaceTecSDK.js/FaceTecPublicApi';
+
 
 // Define types for the Sample App functions that are shared with the processors.
 // This allows for TS typing and VSCode autocompletion
 
 //Function called when the processors are done
+import {FaceTecIDScanResult, FaceTecSessionResult} from "../core-sdk/FaceTecSDK.js/FaceTecPublicApi";
 
 export interface OnComplete {
   (sessionResult: FaceTecSessionResult| null, idScanResult: FaceTecIDScanResult | null, latestNetworkResponseStatus: number):void

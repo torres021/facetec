@@ -3,13 +3,19 @@
 //
 
 
+
 //
 // This is an example self-contained class to perform Enrollment with the FaceTec SDK.
 // You may choose to further componentize parts of this in your own Apps based on your specific requirements.
 //
-import {FaceTecFaceScanProcessor, FaceTecFaceScanResultCallback, FaceTecSessionResult} from '../core-sdk/FaceTecSDK.js/FaceTecPublicApi';
-import {FaceTecSDK} from '../core-sdk/FaceTecSDK.js/FaceTecSDK';
-import {Config} from '../Config';
+import {
+  FaceTecFaceScanProcessor,
+  FaceTecFaceScanResultCallback,
+  FaceTecSessionResult
+} from "../core-sdk/FaceTecSDK.js/FaceTecPublicApi";
+import {SampleAppControllerReference} from "../sampleAppControllerReference/SampleAppControllerReference";
+import {FaceTecSDK} from "../core-sdk/FaceTecSDK.js/FaceTecSDK";
+import {Config} from "../Config";
 
 export class EnrollmentProcessor implements FaceTecFaceScanProcessor {
   latestNetworkRequest: XMLHttpRequest = new XMLHttpRequest();
@@ -20,7 +26,7 @@ export class EnrollmentProcessor implements FaceTecFaceScanProcessor {
   // In the code in your own App, you can pass around signals, flags, intermediates, and results however you would like.
   //
   success: boolean;
-  sampleAppControllerReference: any;
+  sampleAppControllerReference: SampleAppControllerReference;
 
   constructor(sessionToken: string, sampleAppControllerReference: any) {
 
@@ -68,7 +74,7 @@ export class EnrollmentProcessor implements FaceTecFaceScanProcessor {
     //
     // Part 4:  Get essential data off the FaceTecSessionResult
     //
-    let parameters = {
+    var parameters = {
       faceScan: sessionResult.faceScan,
       auditTrailImage: sessionResult.auditTrail[0],
       lowQualityAuditTrailImage: sessionResult.lowQualityAuditTrail[0],
@@ -104,7 +110,7 @@ export class EnrollmentProcessor implements FaceTecFaceScanProcessor {
           if(responseJSON.wasProcessed) {
 
             // Demonstrates dynamically setting the Success Screen Message.
-            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("¡Muy bien!\n Te hemos reconocido");
+            FaceTecSDK.FaceTecCustomization.setOverrideResultScreenSuccessMessage("Liveness\nConfirmed");
 
             // In v9.2.0+, simply pass in scanResultBlob to the proceedToNextStep function to advance the User flow.
             // scanResultBlob is a proprietary, encrypted blob that controls the logic for what happens next for the User.
@@ -136,14 +142,14 @@ export class EnrollmentProcessor implements FaceTecFaceScanProcessor {
     //
     this.latestNetworkRequest.upload.onprogress = (event) => {
 
-      let progress = event.loaded / event.total;
+      var progress = event.loaded / event.total;
       faceScanResultCallback.uploadProgress(progress);
     };
 
     //
     // Part 8:  Actually send the request.
     //
-    let jsonStringToUpload = JSON.stringify(parameters);
+    var jsonStringToUpload = JSON.stringify(parameters);
     this.latestNetworkRequest.send(jsonStringToUpload);
 
     //
@@ -154,8 +160,8 @@ export class EnrollmentProcessor implements FaceTecFaceScanProcessor {
       if(this.latestNetworkRequest.readyState === XMLHttpRequest.DONE) {
         return;
       }
-      faceScanResultCallback.uploadMessageOverride("Cargando...");
-    }, 1000);
+      faceScanResultCallback.uploadMessageOverride("Still Uploading...");
+    }, 6000);
   }
 
   //

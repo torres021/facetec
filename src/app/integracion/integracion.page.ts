@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AngularSampleApp} from "../../assets/facetec/angular-sample-controller";
+import {SampleApp} from "../../assets/facetec/sampleAppController";
 import {ToastController} from "@ionic/angular";
 import {Subject} from "rxjs";
 import {AndroidPermissions} from "@ionic-native/android-permissions/ngx";
@@ -34,18 +34,18 @@ export class IntegracionPage implements OnInit {
   }
 
   iniciarFacetec() {
-    if (AngularSampleApp.isLockedOut()) {
+    if (SampleApp.isLockedOut()) {
       this.mostrarError('Se presenta un bloqueo por cantidad de intentos.. Espere unos minutos.');
       return;
     }
 
-    if (AngularSampleApp.getStatusFaceTec() !== 1) {
-      this.mostrarError(AngularSampleApp.getStatusMessageFaceTec());
+    if (SampleApp.getStatusFaceTec() !== 1) {
+      this.mostrarError(SampleApp.getStatusMessageFaceTec());
       return;
     }
     /* onPhotoIdMatchPressed*/
 
-    AngularSampleApp.onPhotoIdMatchPressed(this.notificador, ('CC' + '1100957789'));
+    SampleApp.onPhotoIDMatchPressed(this.notificador, ('CC' + '1100957789'));
   }
 
   permisos() {
