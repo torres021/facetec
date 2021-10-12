@@ -100,4 +100,10 @@ export class IntegracionPage implements OnInit {
     });
     toast.present();
   }
+
+  /*Agregar a interface ToastOptions
+  *
+  * showCloseButton: boolean;
+  closeButtonText: string;
+  * */
 }
